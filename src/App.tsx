@@ -9,7 +9,6 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import bodyParser from "body-parser";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
 
 const { Header } = Layout;
