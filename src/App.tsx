@@ -8,12 +8,14 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import bodyParser from "body-parser";
 
 const { Header } = Layout;
 
 
 function App() {
   const [time, setTime] = useState(new Date());
+
 
   const timer = setInterval(() => {
     setTime(new Date());
@@ -49,32 +51,33 @@ function App() {
               },
             ]}
           />
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/resume">이력서</Link>
-            </li>
-            <li>
-              <Link to="/portfolio">포트폴리오</Link>
-            </li>
-          </ul>
-        </nav>
         </Header>
-        <Layout.Content style={{ padding: "0 50px "}}>
+
+    <Layout.Content style={{ padding: "0 50px", height: 300 }} >
+      <div className="site-layout-content" style={{  }} >
         <Routes>
-          <Route path="/portfolio" element={ <Portfolio />} />
-          <Route path="/resume" element={<Resume/>} />
-          <Route path="/" element={<Home />} />
-        </Routes>
+              <Route path="/portfolio" element={ <Portfolio />} />
+              <Route path="/resume" element={<Resume/>} />
+              <Route path="/" element={<Home />} />
+            </Routes>
+          </div>
         </Layout.Content>
       </Router>
-      </Layout>
+    </Layout>
   );
 }
 
+const Home = () => {
+  return <div style={{
+      background: "#fff",
+      height: 200,
+      padding: 24,
+      marginTop: 60,
+      marginBottom: 60,
+      border: 5
+   }}
+  > 홈페이지 </div>;
+};
 
 const Resume = () => {
   return (
@@ -93,9 +96,6 @@ const Resume = () => {
 const Portfolio = () => {
   return <></>
 }
-const Home = () => {
-  return <>홈페이지
-  </>
-}
+
 
 export default App;
