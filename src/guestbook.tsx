@@ -1,70 +1,81 @@
-import { Avatar, Button, List } from "antd";
 import React, { useState } from "react";
+import { Avatar, Button, List } from "antd";
+import axios from "axios";
 
 type GuestBookItem = {
-    key: number;
-    title: string;
-    content: string;
-    username: string;
-  }
-  
-  const sample: GuestBookItem[] = [
-    {
-      key: 1,
-      title: '안녕',
-      content: '첫번째',
-      username: '은지',
-    },
-    {
-      key: 1,
-      title: '반가워용',
-      content: '두번째',
-      username: '별'
-    },
-  ];
-  
-const GuestBook = () => {
-const [loading, setLoading ] = useState<boolean>(false);
-    return (
-    <>
-    <List
-      loading={loading}
-      style={{ background: "#fff "}}
-      itemLayout="horizontal"
-      dataSource={sample}
-      renderItem={(item) => (
-        <List.Item >
-          <List.Item.Meta
-            avatar={
-            <div style={{
-              display: "flex", 
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              marginLeft: "20px"
-              }}>
-              <Avatar src="https://joeschmoe.io/api/v1/random" />
-              <>{item.username}</>
-            </div>
-          }
-            title={item.title}
-            description={item.content}
-          />
-        </List.Item>
-      )}
-    />
-    <Button 
-        onClick={() => {
-            setLoading(true);
-            setTimeout(() => {
-            setLoading(false);
-         }, 500);
-        }} //TODO: 이따할거양
+  key: number;
+  title: string;
+  content: string;
+  username: string;
+};
 
-         >수동 새로고침</Button>
+const GuestBook = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<GuestBookItem[]>([]);
+
+  const fetchGuestbookItems = async () => {
+    const instance = axios.create({
+      baseURL: 'http//localhost:3001',
+      headers: {
+        Accept: 'application/json'
+      }
+    })
+    const { data } = await  instance.get("/guestbook/items");
+    console.log("results", data);
+    const results = data;
+    const items: GuestBookItem[] = [];
+    for (let i = 0; i < results.length; i++) {
+      items.push({
+        key: results[i].id,
+        title: results[i].title,
+        content: results[i].content,
+        username: results[i].name,
+      });
+    }
+
+    setData(items);
+  };
+  return (
+    <>
+      <List
+        loading={loading}
+        style={{ background: "#fff " }}
+        itemLayout="horizontal"
+        dataSource={data}
+        renderItem={(item) => (
+          <List.Item>
+            <List.Item.Meta
+              avatar={
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginLeft: "20px",
+                  }}
+                >
+                  <Avatar src="https://joeschmoe.io/api/v1/random" />
+                  <>{item.username}</>
+                </div>
+              }
+              title={item.title}
+              description={item.content}
+            />
+          </List.Item>
+        )}
+      />
+      <Button
+        onClick={async () => {
+          setLoading(true);
+          await fetchGuestbookItems();
+          setLoading(false);
+        }}
+      >
+        수동 새로고침
+      </Button>
     </>
   );
-  
-  };
+};
 
-  export default GuestBook;
+export default GuestBook;
