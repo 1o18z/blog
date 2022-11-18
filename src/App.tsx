@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import './App.css';
-import { Button, Layout, Menu } from 'antd';
+import { Avatar, Button, Layout, List, Menu } from 'antd';
 import axios from 'axios';
 
 import {
@@ -10,6 +10,7 @@ import {
   Link
 } from "react-router-dom";
 import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import  GuestBook  from "./guestbook";
 
 const { Header } = Layout;
 
@@ -71,16 +72,21 @@ function App() {
                key: 3,
                label: <Link to="/portfolio">포트폴리오</Link>,
               },
+              {
+                key: 4,
+                label: <Link to="/guestbook">방명록</Link>,
+              }
             ]}
           />
         </Header>
 
+
     <Layout.Content style={{ padding: "0 50px", height: 300 }} >
       <div className="site-layout-content" style={{  }} >
         <Routes>
+              <Route path="/guestbook" element={ <GuestBook />} />
               <Route path="/portfolio" element={ <Portfolio />} />
               <Route path="/resume" element={<Resume/>} />
-              <Route path="/" element={<Home />} />
             </Routes>
           </div>
         </Layout.Content>
